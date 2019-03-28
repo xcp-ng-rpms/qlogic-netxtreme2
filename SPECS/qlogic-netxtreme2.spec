@@ -54,6 +54,7 @@ rm -rf %{buildroot}
 %package %{modules_package}
 Summary: %{vendor_name} %{driver_name} device drivers
 Group: System Environment/Kernel
+BuildRequires: gcc
 BuildRequires: kernel-devel
 BuildRequires: bc
 Provides: vendor-driver
