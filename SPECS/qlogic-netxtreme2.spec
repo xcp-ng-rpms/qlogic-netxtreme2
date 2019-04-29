@@ -17,18 +17,23 @@
 
 Summary: Qlogic NetXtreme II iSCSI, 1-Gigabit and 10-Gigabit ethernet drivers
 Name: %{vendor_label}-%{driver_name}
-Version: 7.14.29.1
+Version: 7.14.53
 Release: 1%{?dist}
 License: GPL
 Group: System Environment/Kernel
 Requires: %{name}-%{modules_package} = %{version}-%{release}
-Source: https://code.citrite.net/rest/archive/latest/projects/XS/repos/driver-%{name}/archive?at=%{version}&format=tgz&prefix=driver-%{name}-%{version}#/%{name}-%{version}.tar.gz
+
+Source0: https://code.citrite.net/rest/archive/latest/projects/XS/repos/driver-qlogic-netxtreme2/archive?at=7.14.53&format=tgz&prefix=driver-qlogic-netxtreme2-7.14.53#/qlogic-netxtreme2-7.14.53.tar.gz
+
+
+Provides: gitsha(https://code.citrite.net/rest/archive/latest/projects/XS/repos/driver-qlogic-netxtreme2/archive?at=7.14.53&format=tgz&prefix=driver-qlogic-netxtreme2-7.14.53#/qlogic-netxtreme2-7.14.53.tar.gz) = 5a063c6951ccd8a069d6821eca26cf7bea70ce5d
+
 
 %description
 This package contains the Qlogic NetXtreme II iSCSI (bnx2i), 1-Gigabit (bnx2) and 10-Gigabit (bnx2x) ethernet drivers.
 
 %prep
-%autosetup -p1 -n driver-%{name}-%{version}
+%autosetup -p1 -S git -n driver-%{name}-%{version}
 
 %build
 %{?cov_wrap} %{__make} KVER=%{kernel_version} %{build_defs}
@@ -52,10 +57,10 @@ rm -rf %{buildroot}
 %files
 
 %package %{modules_package}
+Provides: gitsha(https://code.citrite.net/rest/archive/latest/projects/XS/repos/driver-qlogic-netxtreme2/archive?at=7.14.53&format=tgz&prefix=driver-qlogic-netxtreme2-7.14.53#/qlogic-netxtreme2-7.14.53.tar.gz) = 5a063c6951ccd8a069d6821eca26cf7bea70ce5d
 Summary: %{vendor_name} %{driver_name} device drivers
 Group: System Environment/Kernel
-BuildRequires: kernel-devel
-BuildRequires: bc
+BuildRequires: kernel-devel, bc, git
 Provides: vendor-driver
 Requires: kernel-uname-r = %{kernel_version}
 Requires(post): /usr/sbin/depmod
@@ -83,6 +88,9 @@ version %{kernel_version}.
 %exclude %{_mandir}/man4/*
 
 %changelog
+* Tue Dec 20 2018 Deli Zhang <deli.zhang@citrix.com> - 7.14.53-1
+- CP-30078: Upgrade netXtreme2 driver to version 7.14.53
+
 * Mon Oct 23 2017 Simon Rowe <simon.rowe@citrix.com> - 7.14.29.1-1
 - UPD-107: update netxtreme2 driver to 7.14.29.1 (QL-643)
 
