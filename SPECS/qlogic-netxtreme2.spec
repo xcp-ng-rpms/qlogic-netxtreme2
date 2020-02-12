@@ -18,7 +18,7 @@
 Summary: Qlogic NetXtreme II iSCSI, 1-Gigabit and 10-Gigabit ethernet drivers
 Name: %{vendor_label}-%{driver_name}
 Version: 7.14.53
-Release: 1%{?dist}
+Release: 1.1%{?dist}
 License: GPL
 Group: System Environment/Kernel
 Requires: %{name}-%{modules_package} = %{version}-%{release}
@@ -29,11 +29,14 @@ Source0: https://code.citrite.net/rest/archive/latest/projects/XS/repos/driver-q
 Provides: gitsha(https://code.citrite.net/rest/archive/latest/projects/XS/repos/driver-qlogic-netxtreme2/archive?at=7.14.53&format=tgz&prefix=driver-qlogic-netxtreme2-7.14.53#/qlogic-netxtreme2-7.14.53.tar.gz) = 5a063c6951ccd8a069d6821eca26cf7bea70ce5d
 
 
+# XCP-ng patches
+Patch1000: qlogic-netxtreme2-Fix-NULL-pointer-dereference-in-bnx2x_del_all_vlans.backport.patch
+
 %description
 This package contains the Qlogic NetXtreme II iSCSI (bnx2i), 1-Gigabit (bnx2) and 10-Gigabit (bnx2x) ethernet drivers.
 
 %prep
-%autosetup -p1 -S git -n driver-%{name}-%{version}
+%autosetup -p1 -n driver-%{name}-%{version}
 
 %build
 %{?cov_wrap} %{__make} KVER=%{kernel_version} %{build_defs}
@@ -89,6 +92,10 @@ version %{kernel_version}.
 %exclude %{_mandir}/man4/*
 
 %changelog
+* Wed Feb 12 2020 Samuel Verschelde <stormi-xcp@ylix.fr> - 7.14.53-1.1
+- Backport patch from kernel tree
+- qlogic-netxtreme2-Fix-NULL-pointer-dereference-in-bnx2x_del_all_vlans.backport.patch
+
 * Tue Dec 20 2018 Deli Zhang <deli.zhang@citrix.com> - 7.14.53-1
 - CP-30078: Upgrade netXtreme2 driver to version 7.14.53
 
