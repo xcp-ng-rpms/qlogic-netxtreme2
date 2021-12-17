@@ -3,7 +3,7 @@
 %define driver_name netxtreme2
 
 %if %undefined kernel_version
-%define kernel_version %(uname -r)
+%define kernel_version dummy
 %endif
 %if %undefined module_dir
 %define module_dir updates
@@ -17,16 +17,16 @@
 
 Summary: Qlogic NetXtreme II iSCSI, 1-Gigabit and 10-Gigabit ethernet drivers
 Name: %{vendor_label}-%{driver_name}
-Version: 7.14.53
-Release: 1.1%{?dist}
+Version: 7.14.76
+Release: 1%{?dist}
 License: GPL
 Group: System Environment/Kernel
 Requires: %{name}-%{modules_package} = %{version}-%{release}
 
-Source0: https://code.citrite.net/rest/archive/latest/projects/XS/repos/driver-qlogic-netxtreme2/archive?at=7.14.53&format=tgz&prefix=driver-qlogic-netxtreme2-7.14.53#/qlogic-netxtreme2-7.14.53.tar.gz
+Source0: https://code.citrite.net/rest/archive/latest/projects/XS/repos/driver-qlogic-netxtreme2/archive?at=7.14.76&format=tgz&prefix=driver-qlogic-netxtreme2-7.14.76#/qlogic-netxtreme2-7.14.76.tar.gz
 
 
-Provides: gitsha(https://code.citrite.net/rest/archive/latest/projects/XS/repos/driver-qlogic-netxtreme2/archive?at=7.14.53&format=tgz&prefix=driver-qlogic-netxtreme2-7.14.53#/qlogic-netxtreme2-7.14.53.tar.gz) = 5a063c6951ccd8a069d6821eca26cf7bea70ce5d
+Provides: gitsha(https://code.citrite.net/rest/archive/latest/projects/XS/repos/driver-qlogic-netxtreme2/archive?at=7.14.76&format=tgz&prefix=driver-qlogic-netxtreme2-7.14.76#/qlogic-netxtreme2-7.14.76.tar.gz) = fd5406760a6d1e292fe862ba7924caff97da6e15
 
 
 # XCP-ng patches
@@ -42,7 +42,6 @@ This package contains the Qlogic NetXtreme II iSCSI (bnx2i), 1-Gigabit (bnx2) an
 %{?cov_wrap} %{__make} KVER=%{kernel_version} %{build_defs}
 
 %install
-rm -rf %{buildroot}
 %{__install} -d %{buildroot}%{_sysconfdir}/modprobe.d
 echo 'options bnx2x num_vfs=0' > %{name}.conf
 %{__install} %{name}.conf %{buildroot}%{_sysconfdir}/modprobe.d
@@ -54,13 +53,10 @@ echo 'options bnx2x num_vfs=0' > %{name}.conf
 # mark modules executable so that strip-to-file can strip them
 find %{buildroot}/lib/modules/%{kernel_version} -name "*.ko" -type f | xargs chmod u+wx
 
-%clean
-rm -rf %{buildroot}
-
 %files
 
 %package %{modules_package}
-Provides: gitsha(https://code.citrite.net/rest/archive/latest/projects/XS/repos/driver-qlogic-netxtreme2/archive?at=7.14.53&format=tgz&prefix=driver-qlogic-netxtreme2-7.14.53#/qlogic-netxtreme2-7.14.53.tar.gz) = 5a063c6951ccd8a069d6821eca26cf7bea70ce5d
+Provides: gitsha(https://code.citrite.net/rest/archive/latest/projects/XS/repos/driver-qlogic-netxtreme2/archive?at=7.14.76&format=tgz&prefix=driver-qlogic-netxtreme2-7.14.76#/qlogic-netxtreme2-7.14.76.tar.gz) = fd5406760a6d1e292fe862ba7924caff97da6e15
 Summary: %{vendor_name} %{driver_name} device drivers
 Group: System Environment/Kernel
 BuildRequires: kernel-devel, bc, git
@@ -92,11 +88,14 @@ version %{kernel_version}.
 %exclude %{_mandir}/man4/*
 
 %changelog
+* Thu Jul 8 2021 Chuntian Xu <chuntian.xu@citrix.com> - 7.14.76-1
+- CP-37167: Update netXtreme2 driver to version 7.14.76
+
 * Wed Feb 12 2020 Samuel Verschelde <stormi-xcp@ylix.fr> - 7.14.53-1.1
 - Backport patch from kernel tree
 - qlogic-netxtreme2-Fix-NULL-pointer-dereference-in-bnx2x_del_all_vlans.backport.patch
 
-* Tue Dec 20 2018 Deli Zhang <deli.zhang@citrix.com> - 7.14.53-1
+* Thu Dec 20 2018 Deli Zhang <deli.zhang@citrix.com> - 7.14.53-1
 - CP-30078: Upgrade netXtreme2 driver to version 7.14.53
 
 * Mon Oct 23 2017 Simon Rowe <simon.rowe@citrix.com> - 7.14.29.1-1
