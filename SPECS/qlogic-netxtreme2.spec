@@ -18,7 +18,7 @@
 Summary: Qlogic NetXtreme II iSCSI, 1-Gigabit and 10-Gigabit ethernet drivers
 Name: %{vendor_label}-%{driver_name}
 Version: 7.14.76
-Release: 1%{?dist}
+Release: 1.1%{?dist}
 License: GPL
 Group: System Environment/Kernel
 Requires: %{name}-%{modules_package} = %{version}-%{release}
@@ -30,7 +30,7 @@ Provides: gitsha(https://code.citrite.net/rest/archive/latest/projects/XS/repos/
 
 
 # XCP-ng patches
-Patch1000: qlogic-netxtreme2-Fix-NULL-pointer-dereference-in-bnx2x_del_all_vlans.backport.patch
+Patch1000: qlogic-netxtreme2-7.14.76-Fix-NULL-pointer-dereference.XCP-ng.patch
 
 %description
 This package contains the Qlogic NetXtreme II iSCSI (bnx2i), 1-Gigabit (bnx2) and 10-Gigabit (bnx2x) ethernet drivers.
@@ -88,8 +88,15 @@ version %{kernel_version}.
 %exclude %{_mandir}/man4/*
 
 %changelog
-* Thu Jul 8 2021 Chuntian Xu <chuntian.xu@citrix.com> - 7.14.76-1
-- CP-37167: Update netXtreme2 driver to version 7.14.76
+* Fri Dec 17 2021 Gael Duperrey <gduperrey@vates.fr> - 7.14.76-1.1
+- Sync with CH 8.2.1
+- *** Upstream changelog ***
+- * Thu Jul 8 2021 Chuntian Xu <chuntian.xu@citrix.com> - 7.14.76-1
+- - CP-37167: Update netXtreme2 driver to version 7.14.76
+- Drop patch partially applied upstream
+- Dropped patch: qlogic-netxtreme2-Fix-NULL-pointer-dereference-in-bnx2x_del_all_vlans.backport.patch
+- Add new patch to extend upstream's same fix to more devices, as in the dropped patch
+- New patch: qlogic-netxtreme2-7.14.76-Fix-NULL-pointer-dereference.XCP-ng.patch
 
 * Wed Feb 12 2020 Samuel Verschelde <stormi-xcp@ylix.fr> - 7.14.53-1.1
 - Backport patch from kernel tree
