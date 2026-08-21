@@ -19,11 +19,12 @@
 Summary: Qlogic NetXtreme II iSCSI, 1-Gigabit and 10-Gigabit ethernet drivers
 Name: %{vendor_label}-%{driver_name}
 Version: 7.14.76
-Release: %{?xsrel}.2%{?dist}
+Release: %{?xsrel}.2.0.kernelpreview.1%{?dist}
+
 License: GPL
 Group: System Environment/Kernel
 %{?_cov_buildrequires}
-BuildRequires: kernel-devel, bc
+BuildRequires: kernel-devel >= 4.19.325-cip137.8.0.46.16, bc
 BuildRequires: gcc
 Provides: vendor-driver
 Requires: kernel-uname-r = %{kernel_version}
@@ -86,6 +87,9 @@ find %{buildroot}/lib/modules/%{kernel_version} -name "*.ko" -type f | xargs chm
 %{?_cov_results_package}
 
 %changelog
+* Tue Nov 17 2026 Quentin Casasnovas <quentin.casasnovas@vates.tech> - 7.14.76-2.2.0.kernelpreview.1
+- Rebuild for kernel v4.19.325-cip137
+
 * Tue Nov 17 2026 Quentin Casasnovas <quentin.casasnovas@vates.tech> - 7.14.76-2.2
 - Merge the modules subpackage into the main package
 - Obsoletes qlogic-netxtreme2-4.19.0+1-modules
