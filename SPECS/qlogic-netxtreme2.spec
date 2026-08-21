@@ -23,7 +23,10 @@
 Summary: Qlogic NetXtreme II iSCSI, 1-Gigabit and 10-Gigabit ethernet drivers
 Name: %{vendor_label}-%{driver_name}
 Version: 7.14.76
-Release: %{?xsrel}.1%{?dist}
+Release: %{?xsrel}.2%{?dist}
+# Built against new kABI after cip rebase
+Requires: xcpng-kernel-kabi = 4.19.325-cip134+
+
 License: GPL
 Group: System Environment/Kernel
 %{?_cov_buildrequires}
@@ -95,6 +98,9 @@ version %{kernel_version}.
 %{?_cov_results_package}
 
 %changelog
+* Mon Aug 31 2026 Quentin Casasnovas <quentin.casasnovas@vates.tech> - 7.14.76-2.2
+- Rebuild for kernel v4.19.325-cip134
+
 * Tue Aug 30 2022 Samuel Verschelde <stormi-xcp@ylix.fr> - 7.14.76-2.1
 - Rebase on CH 8.3 Preview
 - Keep qlogic-netxtreme2-Fix-NULL-pointer-dereference-in-bnx2x_del_all_vlans.backport.patch
@@ -113,4 +119,3 @@ version %{kernel_version}.
 
 * Mon Oct 23 2017 Simon Rowe <simon.rowe@citrix.com> - 7.14.29.1-1
 - UPD-107: update netxtreme2 driver to 7.14.29.1 (QL-643)
-
