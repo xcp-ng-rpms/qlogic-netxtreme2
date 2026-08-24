@@ -32,6 +32,8 @@ Source0: qlogic-netxtreme2-7.14.76.tar.gz
 
 # XCP-ng patches
 Patch1000: qlogic-netxtreme2-7.14.76-Fix-NULL-pointer-dereference.XCP-ng.patch
+Patch1001: 0001-bnx2-compat-check-for-prandom_bytes-in-prandom.h-as-.patch
+Patch1002: 0001-bnx2x-use-kernel-definition-of-BITS_TO_BYTES-when-av.patch
 
 %description
 This package contains the Qlogic NetXtreme II iSCSI (bnx2i), 1-Gigabit (bnx2) and 10-Gigabit (bnx2x) ethernet drivers.
