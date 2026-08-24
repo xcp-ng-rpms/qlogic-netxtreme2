@@ -1,0 +1,27 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Quentin Casasnovas <quentin.casasnovas@vates.tech>
+Date: Mon, 24 Aug 2026 17:08:02 +0200
+Subject: [PATCH] bnx2x: use kernel definition of BITS_TO_BYTES when available.
+
+The kernel has its own definition since 1ce62f5178e4 ("ocfs2/dlm: move
+BITS_TO_BYTES() to bitops.h for wider use") in v4.19.285.
+
+Signed-off-by: Quentin Casasnovas <quentin.casasnovas@vates.tech>
+---
+ bnx2x-1.715.8/src/bnx2x_init.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/bnx2x-1.715.8/src/bnx2x_init.h b/bnx2x-1.715.8/src/bnx2x_init.h
+index 847a6bc42823..86a7310b8601 100644
+--- a/bnx2x-1.715.8/src/bnx2x_init.h
++++ b/bnx2x-1.715.8/src/bnx2x_init.h
+@@ -308,7 +308,9 @@ static inline void bnx2x_dcb_config_qm(struct bnx2x *bp, enum cos_mode mode,
+  *    possible, the driver should only write the valid vnics into the internal
+  *    ram according to the appropriate port mode.
+  */
++#ifndef BITS_TO_BYTES
+ #define BITS_TO_BYTES(x) ((x)/8)
++#endif
+ 
+ /* CMNG constants, as derived from system spec calculations */
+ 
