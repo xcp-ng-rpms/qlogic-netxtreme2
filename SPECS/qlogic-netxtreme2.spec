@@ -13,21 +13,28 @@
 %if %undefined module_dir
 %define module_dir updates
 %endif
-%if %undefined modules_suffix
-%define modules_suffix modules
-%endif
 
-%define modules_package %{kernel_version}-%{modules_suffix}
 %define build_defs BNX2FC_KERNEL_OVERRIDE=1 BNX2FC_SUP=-DXENSERVER DISTRO=Citrix
 
 Summary: Qlogic NetXtreme II iSCSI, 1-Gigabit and 10-Gigabit ethernet drivers
 Name: %{vendor_label}-%{driver_name}
 Version: 7.14.76
-Release: %{?xsrel}.1%{?dist}
+Release: %{?xsrel}.2%{?dist}
 License: GPL
 Group: System Environment/Kernel
 %{?_cov_buildrequires}
-Requires: %{name}-%{modules_package} = %{version}-%{release}
+BuildRequires: kernel-devel, bc
+BuildRequires: gcc
+Provides: vendor-driver
+Requires: kernel-uname-r = %{kernel_version}
+Requires(post): /usr/sbin/depmod
+Requires(postun): /usr/sbin/depmod
+
+# The modules used to be shipped in a subpackage named after the kernel
+# version, which breaks as soon as the kernel uname changes.
+Provides: qlogic-netxtreme2-4.19.0+1-modules = %{version}-%{release}
+Obsoletes: qlogic-netxtreme2-4.19.0+1-modules < %{version}-%{release}
+
 Source0: qlogic-netxtreme2-7.14.76.tar.gz
 
 # XCP-ng patches
@@ -57,34 +64,18 @@ find %{buildroot}/lib/modules/%{kernel_version} -name "*.ko" -type f | xargs chm
 
 %{?_cov_install}
 
-%files
-
-%package %{modules_package}
-Summary: %{vendor_name} %{driver_name} device drivers
-Group: System Environment/Kernel
-BuildRequires: kernel-devel, bc
-BuildRequires: gcc
-Provides: vendor-driver
-Requires: kernel-uname-r = %{kernel_version}
-Requires(post): /usr/sbin/depmod
-Requires(postun): /usr/sbin/depmod
-
-%description %{modules_package}
-%{vendor_name} %{driver_name} device drivers for the Linux Kernel
-version %{kernel_version}.
-
-%post %{modules_package}
+%post
 /sbin/depmod %{kernel_version}
 %{regenerate_initrd_post}
 
-%postun %{modules_package}
+%postun
 /sbin/depmod %{kernel_version}
 %{regenerate_initrd_postun}
 
-%posttrans %{modules_package}
+%posttrans
 %{regenerate_initrd_posttrans}
 
-%files %{modules_package}
+%files
 %config(noreplace) %{_sysconfdir}/modprobe.d/*.conf
 /lib/modules/%{kernel_version}/*/*.ko
 %exclude /etc/depmod.d/bnx2x.conf
@@ -93,6 +84,10 @@ version %{kernel_version}.
 %{?_cov_results_package}
 
 %changelog
+* Tue Nov 17 2026 Quentin Casasnovas <quentin.casasnovas@vates.tech> - 7.14.76-2.2
+- Merge the modules subpackage into the main package
+- Obsoletes qlogic-netxtreme2-4.19.0+1-modules
+
 * Tue Aug 30 2022 Samuel Verschelde <stormi-xcp@ylix.fr> - 7.14.76-2.1
 - Rebase on CH 8.3 Preview
 - Keep qlogic-netxtreme2-Fix-NULL-pointer-dereference-in-bnx2x_del_all_vlans.backport.patch
@@ -111,4 +106,3 @@ version %{kernel_version}.
 
 * Mon Oct 23 2017 Simon Rowe <simon.rowe@citrix.com> - 7.14.29.1-1
 - UPD-107: update netxtreme2 driver to 7.14.29.1 (QL-643)
-
